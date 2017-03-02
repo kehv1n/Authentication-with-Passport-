@@ -1,16 +1,17 @@
 const express = require('express');
 const protRoutes = express.Router();
+const ensureLogin = require('connect-ensure-login');
 
 
 
-protRoutes.get('/secret', (req, res, next) => {
-res.send('shsshhsshhshshshshhshs');
+protRoutes.get('/secret', ensureLogin.ensureLoggedIn(), (req, res, next) => {
+  res.send('shsshhsshhshshshshhshs');
 
 
 });
 
-protRoutes.get('/snowden-files', (req, res, next) => {
-res.send('george bush did 911');  
+protRoutes.get('/snowden-files', ensureLogin.ensureLoggedIn(), (req, res, next) => {
+  res.send('george bush did 911');
 });
 
 
