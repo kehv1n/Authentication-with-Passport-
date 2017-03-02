@@ -4,14 +4,16 @@ const favicon      = require('serve-favicon');
 const logger       = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
-const layouts      = require('express-ejs-layouts');
-const mongoose     = require('mongoose');
-const session      = require ('express-session');
-const passport     = require('passport');
-const LocalStrategy= require('passport-local').Strategy;
-const bcrypt       = require('bcrypt');
+const layouts      = require('express-ejs-layouts'); // Layouts to make our life easier
+const mongoose     = require('mongoose'); // Mongoose for DB
+const session      = require ('express-session'); // Saves sessions to our DB
+const passport     = require('passport'); // Require to make basic authentication & social authentication
+const LocalStrategy= require('passport-local').Strategy;  //
+const bcrypt       = require('bcrypt'); /// REQUIRE bcrypt to encrypt passwords
+const flash        = require('connect-flash'); //// REQUIRE FLASH TO SEND USERS MESSAGES
 
-const User         = require('./models/user-model.js');
+const User         = require('./models/user-model.js'); //Require usrr Schema
+
 
 
 mongoose.connect('mongodb://localhost/passport-app');
@@ -32,17 +34,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(layouts);
+app.use(layouts); // Use Layouts
 
-app.use(session({
+app.use(session({ //Use Sessions
   secret: 'It was him Mr.Krabs! Heee Was Number Oneee!',
   resave: true,
   saveUninitialized: true
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize()); //Use Passport
+app.use(passport.session()); //Use Passport Sessions
+app.use(flash()); /// USES FLASH
 
-passport.use(new LocalStrategy((username, password, next) => {
+passport.use(new LocalStrategy((username, password, next) => { //Use Local Strategy
   User.findOne({ userName: username }, (err, user) => {
     if (err) {
       return next(err);
@@ -76,6 +79,9 @@ app.use('/', index);
 
 const authRoutes = require('./routes/auth-routes.js');
 app.use('/', authRoutes);
+
+const protRoutes = require('./routes/protected-routes.js');
+app.use('/', protRoutes);
 /////--------ROUTES GO HERE-------------//////
 
 // catch 404 and forward to error handler

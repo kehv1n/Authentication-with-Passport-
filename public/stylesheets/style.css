@@ -6,3 +6,25 @@ body {
 a {
   color: #00B7FF;
 }
+
+.success{
+
+  background-color: lightgreen;
+  color: white;
+  width: 300px;
+  height: 20px;
+  border: 1px solid green;
+  padding: 5px
+}
+
+.success:hover {
+  background-color: green;
+  padding: 5px;
+  border: none;
+
+}
+
+.error {
+
+
+}

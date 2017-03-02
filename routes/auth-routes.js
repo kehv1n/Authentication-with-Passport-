@@ -40,9 +40,10 @@ authRoutes.post("/signup", (req, res, next) => {
     });
 
     newUser.save((err) => {
-      if (err) {
+      if (err) { // IF problem
         res.render("auth/signup-view", { message: "Something went wrong" });
-      } else {
+      } else { // If no problem ;)
+        req.flash('success' , 'You have been registered. Try logging in');
         res.redirect("/");
       }
     });
@@ -50,7 +51,9 @@ authRoutes.post("/signup", (req, res, next) => {
 });
 
 authRoutes.get('/login', (req, res, next) => {
-  res.render('auth/login-view.ejs');
+  res.render('auth/login-view.ejs', {
+    errorMessage: req.flash('message')
+  });
 });
 
 authRoutes.post('/login',
@@ -58,8 +61,15 @@ authRoutes.post('/login',
     successRedirect : '/',
     failureRedirect : '/login',
     failureFlash : true,
+    successFlash : 'You have been logged in, user!',
     passReqToCallback : true
   })
 );
 
+authRoutes.get('/logout', (req, res, next) => {
+  req.logout();
+  req.flash('success', 'You have been logged out');
+  res.redirect('/');
+
+});
 module.exports = authRoutes;
