@@ -58,9 +58,9 @@ authRoutes.get('/login', (req, res, next) => {
 
 authRoutes.post('/login',
   passport.authenticate('local', {
-    successRedirect : '/',
-    failureRedirect : '/login',
-    failureFlash : true,
+    successReturnOrRedirect : '/', //Saves the previous location of the user
+    failureRedirect : '/login', //IF they try to go to a non-authenticated page
+    failureFlash : true, // Sends them there once they are authenticated
     successFlash : 'You have been logged in, user!',
     passReqToCallback : true
   })
@@ -72,4 +72,11 @@ authRoutes.get('/logout', (req, res, next) => {
   res.redirect('/');
 
 });
+
+authRoutes.get("/auth/facebook", passport.authenticate("facebook"));
+authRoutes.get('/auth/facebook/callback', passport.authenticate("facebook", {
+  successRedirect: '/', ///Where do you want take the user on success of the login
+  failureRedirect: '/login' //Where do you want to take the user upon failure of login 
+}));
+
 module.exports = authRoutes;

@@ -11,6 +11,7 @@ const passport     = require('passport'); // Require to make basic authenticatio
 const LocalStrategy= require('passport-local').Strategy;  //
 const bcrypt       = require('bcrypt'); /// REQUIRE bcrypt to encrypt passwords
 const flash        = require('connect-flash'); //// REQUIRE FLASH TO SEND USERS MESSAGES
+const fbStrategy   = require('passport-facebook').Strategy;
 
 const User         = require('./models/user-model.js'); //Require usrr Schema
 
@@ -61,11 +62,29 @@ passport.use(new LocalStrategy((username, password, next) => { //Use Local Strat
   });
 }));
 
+passport.use(new fbStrategy({
+  clientID: '///',
+  clientSecret: '///',
+  callbackURL: 'http://localhost:3000/auth/facebook/callback'
+},(accessToken, refreshToken, profile, done) => {
+  done(null, profile);
+}));
+
 passport.serializeUser((user, cb) => {
+  if (user.provider) {
+    cb(null, user);
+  } else {
+    cb(null, user._id);
+
+  }
   cb(null, user.id);
 });
 
 passport.deserializeUser((id, cb) => {
+  if (user.provider) {
+    cb(null, id);
+    return;
+  }
   User.findOne({ "_id": id }, (err, user) => {
     if (err) { return cb(err); }
     cb(null, user);
