@@ -72,11 +72,22 @@ authRoutes.get('/logout', (req, res, next) => {
   res.redirect('/');
 
 });
-
+ ///////////////// FACEBOOK AUTH ////////////////////////
 authRoutes.get("/auth/facebook", passport.authenticate("facebook"));
 authRoutes.get('/auth/facebook/callback', passport.authenticate("facebook", {
   successRedirect: '/', ///Where do you want take the user on success of the login
-  failureRedirect: '/login' //Where do you want to take the user upon failure of login 
+  failureRedirect: '/login' //Where do you want to take the user upon failure of login
+}));
+
+///////////////// GOOGLE AUTH ////////////////////////
+authRoutes.get("/auth/google", passport.authenticate("google", {
+  scope: ["https://www.googleapis.com/auth/plus.login",
+          "https://www.googleapis.com/auth/plus.profile.emails.read"]
+}));
+
+authRoutes.get("/auth/google/callback", passport.authenticate("google", {
+  failureRedirect: "/login",
+  successRedirect: "/"
 }));
 
 module.exports = authRoutes;
