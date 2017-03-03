@@ -63,16 +63,16 @@ passport.use(new LocalStrategy((username, password, next) => { //Use Local Strat
   });
 }));
 passport.use(new gGStrategy({  /////GOOGLE STRATEGY
-  clientID: '//',
-  clientSecret: '//',
+  clientID: '',
+  clientSecret: '',
   callbackURL: 'http://localhost:3000/auth/google/callback'
   },(accessToken, refreshToken, profile, done) => {
   done(null, profile);
 }));
 
 passport.use(new fbStrategy({ /////FACEBOOK STRATEGY
-  clientID: '//',
-  clientSecret: '//',
+  clientID: '',
+  clientSecret: '',
   callbackURL: 'http://localhost:3000/auth/facebook/callback'
 },(accessToken, refreshToken, profile, done) => {
   done(null, profile);
@@ -85,7 +85,6 @@ passport.serializeUser((user, cb) => {
     cb(null, user._id);
 
   }
-  cb(null, user.id);
 });
 
 passport.deserializeUser((id, cb) => {
@@ -109,6 +108,9 @@ app.use('/', authRoutes);
 
 const protRoutes = require('./routes/protected-routes.js');
 app.use('/', protRoutes);
+
+const roomRoutes = require('./routes/rooms-routes.js');
+app.use('/',roomRoutes);
 /////--------ROUTES GO HERE-------------//////
 
 // catch 404 and forward to error handler

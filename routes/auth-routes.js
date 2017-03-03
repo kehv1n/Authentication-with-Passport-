@@ -58,7 +58,7 @@ authRoutes.get('/login', (req, res, next) => {
 
 authRoutes.post('/login',
   passport.authenticate('local', {
-    successReturnOrRedirect : '/', //Saves the previous location of the user
+    successReturnToOrRedirect : '/', //Saves the previous location of the user
     failureRedirect : '/login', //IF they try to go to a non-authenticated page
     failureFlash : true, // Sends them there once they are authenticated
     successFlash : 'You have been logged in, user!',
